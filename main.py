@@ -18,6 +18,8 @@ class Map(QMainWindow):
         self.setWindowTitle('Карта')
 
         self.size = 0.002
+        self.l1 = 37.530887
+        self.l2 = 55.703118
         self.map_server = "http://static-maps.yandex.ru/1.x/"
         self.map_file = "map.jpg"
 
@@ -28,7 +30,7 @@ class Map(QMainWindow):
 
     def load_map(self):
         self.map_params = {
-            "ll": "37.530887,55.703118",
+            "ll": str(self.l1) + "," + str(self.l2),
             "spn": str(self.size) + "," + str(self.size),
             "l": "map"}
         response = requests.get(self.map_server, params=self.map_params)
@@ -46,6 +48,14 @@ class Map(QMainWindow):
             self.run()
         elif event.key() == Qt.Key_PageDown:
             self.run_1()
+        elif event.key() == Qt.Key_Up:
+            self.run_2()
+        elif event.key() == Qt.Key_Down:
+            self.run_3()
+        elif event.key() == Qt.Key_Right:
+            self.run_4()
+        elif event.key() == Qt.Key_Left:
+            self.run_5()
 
     def run(self):
         self.size = self.size / 2 if self.size >= 0.004 else self.size
@@ -53,6 +63,22 @@ class Map(QMainWindow):
 
     def run_1(self):
         self.size = self.size * 2 if self.size < 8 else self.size
+        self.load_map()
+
+    def run_2(self):
+        self.l2 = self.l2 + self.size if self.l2 < 80 - self.size else self.l2
+        self.load_map()
+
+    def run_3(self):
+        self.l2 = self.l2 - self.size if self.l2 > 43 + self.size else self.l2
+        self.load_map()
+
+    def run_4(self):
+        self.l1 = self.l1 + self.size if self.l1 < 180 - self.size else self.l1
+        self.load_map()
+
+    def run_5(self):
+        self.l1 = self.l1 - self.size if self.l1 > 20 + self.size else self.l1
         self.load_map()
 
 
